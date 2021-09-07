@@ -7,6 +7,42 @@
 const fastify = require('fastify')({ logger: true })
 
 /**
+ * Define database constants
+ * 
+ * It is important to define it this way as we can extract this
+ * to a configuration file. More on this post-demo.
+ */
+const DATABASE_USER = 'postgres'
+const DATABASE_PASSWORD = 'Kaizen123'
+const DATABASE_HOST = '172.17.0.2'
+const DATABASE_NAME = 'todo-test'
+
+/** Complete DB connection string */
+const dbConnectionString = `postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE_NAME}`
+
+fastify.log.info(`Connecting to DB ${dbConnectionString}`)
+
+/** Connect to the database */
+fastify.register(require('fastify-postgres'), {
+    connectionString: dbConnectionString,
+})
+
+/** Define GET /todos route */
+fastify.get('/todos', async (request, reply) => {
+    /** Get a client connection to the database */
+    const client = await fastify.pg.connect()
+
+    /** Execute query */
+    const { rows } = await client.query('SELECT * FROM todoitems')
+
+    /** Release client -- basically close connection */
+    client.release()
+
+    /** Return queried data */
+    return rows
+})
+
+/**
  * Define an async function called start()
  */
 const start = async () => {
