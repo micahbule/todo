@@ -13,8 +13,8 @@ const fastify = require('fastify')({ logger: true })
  * to a configuration file. More on this post-demo.
  */
 const DATABASE_USER = 'postgres'
-const DATABASE_PASSWORD = 'Kaizen123'
-const DATABASE_HOST = '172.17.0.2'
+const DATABASE_PASSWORD = 'SomeSecurePassword'
+const DATABASE_HOST = 'localhost'
 const DATABASE_NAME = 'todo-test'
 
 /** Complete DB connection string */
